@@ -1,12 +1,12 @@
 const {Sequelize} = require('sequelize')
 
 //LOCAL CONNECTION
-const sequelize = new Sequelize('conduit','root','root',{
-    dialect: 'mysql',
-    host:'localhost',
-    port: 8889,
-    logging: false
-});
+// const sequelize = new Sequelize('conduit','root','root',{
+//     dialect: 'mysql',
+//     host:'localhost',
+//     port: 8889,
+//     logging: false
+// });
 
 
 //AMAZON RDS CONNECTION
@@ -19,18 +19,12 @@ const sequelize = new Sequelize('conduit','root','root',{
  */
 
 // CHANGE IF PROD
-/* const sequelize = new Sequelize('d6rk5ijgmvcf6q',process.env.USER_NAME,process.env.PASSWORD,{
+const sequelize = new Sequelize('d6rk5ijgmvcf6q','postgres','mySecretDB_p@ss1',{
     dialect: 'postgres',
     host: process.env.DB_HOST,
     logging: false,
     port: 5432,
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false // <<<<<<< YOU NEED THIS
-        }
-    }
-}); */
+})
 
 const checkConnection =async () => {
     try {

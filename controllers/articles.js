@@ -54,12 +54,14 @@ module.exports.createArticle = async (req, res) => {
 		const user = await User.findByPk(req.user.email);
 		if (!user) throw new Error('User does not exist');
 		const slug = slugify(data.title);
+
 		let article = await Article.create({
 			slug: slug,
 			title: data.title,
 			description: data.description,
 			body: data.body,
 			UserEmail: user.email,
+			isMature: data.isMature,
 		});
 
 		if (data.tagList) {
@@ -249,6 +251,31 @@ module.exports.getAllArticles = async (req, res) => {
 		const code = res.statusCode ? res.statusCode : 422;
 		return res.status(code).json({
 			errors: { body: ['Could not create article', e.message] },
+		});
+	}
+};
+
+module.exports.getAllMatureArticles = async (req, res) => {
+	try {
+		//Get all articles:
+		let article;
+		article = await Article.findAll({
+			where: {
+				isMature: true
+			},
+			include: [
+				{
+					model: User,
+					attributes: ['email', 'username', 'bio', 'image'],
+				},
+			],
+			limit: parseInt(10)
+		});
+		res.json({ article });
+	} catch (e) {
+		const code = res.statusCode ? res.statusCode : 422;
+		return res.status(code).json({
+			errors: { body: ['Could not retrieve mature article', e.message] },
 		});
 	}
 };
