@@ -282,16 +282,17 @@ module.exports.getAllMatureArticles = async (req, res) => {
 
 module.exports.getFeed = async (req, res) => {
 	try {
-		const query = `
-            SELECT UserEmail
-            FROM followers
-            WHERE followerEmail = "${req.user.email}"`;
-		const followingUsers = await sequelize.query(query);
-		if (followingUsers[0].length == 0) {
+		const followingUsers = await User.findOne({
+			where: { email: req.user.email },
+			include: ['followers']
+		});
+
+		if (followingUsers.followers.length == 0) {
 			return res.json({ articles: [] });
 		}
+		
 		let followingUserEmail = [];
-		for (let t of followingUsers[0]) {
+		for (let t of followingUsers.followers) {
 			followingUserEmail.push(t.UserEmail);
 		}
 
