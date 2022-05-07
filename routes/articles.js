@@ -6,6 +6,7 @@ const {authByToken} = require('../middleware/auth')
 const ArticleController = require('../controllers/articles')
 
 router.get('/',ArticleController.getAllArticles)                    //Get most recent articles from users you follow
+router.get('/mature',ArticleController.getAllMatureArticles)        //Get most recent articles from users you follow
 router.get('/feed',authByToken,ArticleController.getFeed)           //Get most recent articles globally
 router.post('/',authByToken,ArticleController.createArticle)        //Create an article
 router.get('/:slug',ArticleController.getSingleArticleBySlug)       //Get an article
